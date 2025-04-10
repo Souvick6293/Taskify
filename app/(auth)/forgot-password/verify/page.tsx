@@ -1,0 +1,79 @@
+'use client'
+
+import { useForm } from 'react-hook-form'
+import { useAuth } from '@/hooks/useAuth'
+import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
+import Link from 'next/link'
+import { RiArrowGoBackFill } from "react-icons/ri"
+import { toast } from 'react-hot-toast'
+
+export default function VerifyForgotPasswordPage() {
+    const { register, handleSubmit } = useForm<{
+        token: string
+        newPassword: string
+    }>()
+    const { verifyForgotPasswordOtp } = useAuth()
+    const router = useRouter()
+    const [email, setEmail] = useState('')
+
+    useEffect(() => {
+        const savedEmail = sessionStorage.getItem('reset-email')
+        if (!savedEmail) {
+            router.push('/forgot-password')
+        } else {
+            setEmail(savedEmail)
+        }
+    }, [router])
+
+    const onSubmit = (data: { token: string; newPassword: string }) => {
+        verifyForgotPasswordOtp.mutate(
+            { email, ...data },
+            {
+                onSuccess: () => {
+                    toast.success('Password changed successfully!')
+                    sessionStorage.removeItem('reset-email')
+                    router.push('/login')
+                },
+                onError: (err: any) => {
+                    toast.error(err.message || 'Something went wrong!')
+                }
+            }
+        )
+    }
+
+    return (
+        <div className="flex justify-center items-center min-h-screen bg-gray-100 dark:bg-gray-900">
+            <Link
+                href="/"
+                className="absolute top-5 right-5 inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow-md transition"
+            >
+                <RiArrowGoBackFill />
+                Back
+            </Link>
+            <form onSubmit={handleSubmit(onSubmit)}
+                className="bg-white dark:bg-gray-800 p-6 rounded-md w-[90%] md:min-w-[400px] max-w-md mx-auto space-y-4 shadow-line"
+            >
+                <h2 className="text-xl font-semibold mb-4">Verify OTP & Set New Password</h2>
+                <input
+                    type="text"
+                    placeholder="Enter OTP"
+                    {...register('token', { required: true })}
+                    className="w-full p-2 border rounded"
+                />
+                <input
+                    type="password"
+                    placeholder="New Password"
+                    {...register('newPassword', { required: true, minLength: 6 })}
+                    className="w-full p-2 border rounded"
+                />
+                <button
+                    type="submit"
+                    className="w-full bg-green-600 text-white py-2 rounded"
+                >
+                    Reset Password
+                </button>
+            </form>
+        </div>
+    )
+}
