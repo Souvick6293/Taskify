@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 
 import { useForm } from 'react-hook-form'
@@ -8,6 +7,7 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { RiArrowGoBackFill } from "react-icons/ri"
 import { toast } from 'react-hot-toast'
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai"
 
 export default function VerifyForgotPasswordPage() {
     const { register, handleSubmit } = useForm<{
@@ -17,6 +17,7 @@ export default function VerifyForgotPasswordPage() {
     const { verifyForgotPasswordOtp } = useAuth()
     const router = useRouter()
     const [email, setEmail] = useState('')
+    const [showPassword, setShowPassword] = useState(false)
 
     useEffect(() => {
         const savedEmail = sessionStorage.getItem('reset-email')
@@ -36,8 +37,12 @@ export default function VerifyForgotPasswordPage() {
                     sessionStorage.removeItem('reset-email')
                     router.push('/login')
                 },
-                onError: (err: any) => {
-                    toast.error(err.message || 'Something went wrong!')
+                onError: (err: unknown) => {
+                    if (err instanceof Error) {
+                        toast.error(err.message)
+                    } else {
+                        toast.error('Something went wrong!')
+                    }
                 }
             }
         )
@@ -62,12 +67,21 @@ export default function VerifyForgotPasswordPage() {
                     {...register('token', { required: true })}
                     className="w-full p-2 border rounded"
                 />
-                <input
-                    type="password"
-                    placeholder="New Password"
-                    {...register('newPassword', { required: true, minLength: 6 })}
-                    className="w-full p-2 border rounded"
-                />
+                <div className="relative">
+                    <input
+                        type={showPassword ? "text" : "password"}
+                        placeholder="New Password"
+                        {...register('newPassword', { required: true, minLength: 6 })}
+                        className="w-full p-2 border rounded pr-10"
+                    />
+                    <button
+                        type="button"
+                        onClick={() => setShowPassword(prev => !prev)}
+                        className="absolute right-2 top-1/2 transform -translate-y-1/2 text-xl text-gray-600"
+                    >
+                        {showPassword ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
+                    </button>
+                </div>
                 <button
                     type="submit"
                     className="w-full bg-green-600 text-white py-2 rounded"

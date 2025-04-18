@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 
 import { useForm } from 'react-hook-form'
@@ -8,7 +7,9 @@ import { useRouter } from 'next/navigation'
 import { FcGoogle } from 'react-icons/fc'
 import { FaFacebook } from 'react-icons/fa'
 import Link from 'next/link'
-import { RiArrowGoBackFill } from "react-icons/ri";
+import { RiArrowGoBackFill } from "react-icons/ri"
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai"
+import { useState } from 'react'
 
 type LoginData = {
   email: string
@@ -18,6 +19,7 @@ type LoginData = {
 export default function LoginPage() {
   const { login, loginWithGoogle, loginWithFacebook } = useAuth()
   const router = useRouter()
+  const [showPassword, setShowPassword] = useState(false)
 
   const {
     register,
@@ -31,8 +33,12 @@ export default function LoginPage() {
         toast.success('Login successful!')
         router.push('/homepage')
       },
-      onError: (err: any) => {
-        toast.error(err.message || 'Login failed')
+      onError: (err: unknown) => {
+        if (err instanceof Error) {
+          toast.error(err.message)
+        } else {
+          toast.error('Login failed')
+        }
       },
     })
   }
@@ -40,18 +46,28 @@ export default function LoginPage() {
   const handleGoogleLogin = async () => {
     try {
       await loginWithGoogle()
-    } catch (error: any) {
-      toast.error(error.message || 'Google login failed')
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(error.message)
+      } else {
+        toast.error('Google login failed')
+      }
     }
   }
+  
 
   const handleFacebookLogin = async () => {
     try {
       await loginWithFacebook()
-    } catch (error: any) {
-      toast.error(error.message || 'Facebook login failed')
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(error.message)
+      } else {
+        toast.error('Facebook login failed')
+      }
     }
   }
+  
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100 dark:bg-gray-900">
@@ -76,12 +92,21 @@ export default function LoginPage() {
         />
         {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
 
-        <input
-          {...register('password', { required: 'Password is required' })}
-          type="password"
-          placeholder="Password"
-          className="w-full px-3 py-2 border rounded"
-        />
+        <div className="relative">
+          <input
+            {...register('password', { required: 'Password is required' })}
+            type={showPassword ? "text" : "password"}
+            placeholder="Password"
+            className="w-full px-3 py-2 border rounded pr-10"
+          />
+          <button
+            type="button"
+            onClick={() => setShowPassword((prev) => !prev)}
+            className="absolute right-2 top-1/2 transform -translate-y-1/2 text-xl text-gray-600"
+          >
+            {showPassword ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
+          </button>
+        </div>
         {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
 
         <button type="submit" className="w-full bg-blue-600 text-white py-2 rounded">

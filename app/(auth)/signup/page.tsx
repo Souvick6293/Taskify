@@ -10,6 +10,7 @@ import { FcGoogle } from 'react-icons/fc'
 import { FaFacebook } from 'react-icons/fa'
 import Link from 'next/link'
 import { RiArrowGoBackFill } from "react-icons/ri";
+import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai'
 
 type FormData = {
   fullName: string
@@ -28,6 +29,8 @@ export default function SignUpPage() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [password, setPassword] = useState('')
   const [timeLeft, setTimeLeft] = useState(120)
+  const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
   const {
     register,
@@ -157,27 +160,43 @@ export default function SignUpPage() {
             />
             {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
 
-            <input
-              {...register('password', {
-                required: 'Password is required',
-                minLength: { value: 6, message: 'Minimum 6 characters' },
-              })}
-              type="password"
-              placeholder="Password"
-              className="w-full px-3 py-2 border rounded"
-            />
+            <div className="relative">
+              <input
+                {...register('password', {
+                  required: 'Password is required',
+                  minLength: { value: 6, message: 'Minimum 6 characters' },
+                })}
+                type={showPassword ? 'text' : 'password'}
+                placeholder="Password"
+                className="w-full px-3 py-2 border rounded pr-10"
+              />
+              <div
+                className="absolute inset-y-0 right-3 flex items-center cursor-pointer text-gray-600"
+                onClick={() => setShowPassword((prev) => !prev)}
+              >
+                {showPassword ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
+              </div>
+            </div>
             {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
 
-            <input
-              {...register('confirmPassword', {
-                required: 'Please confirm your password',
-                validate: (value) =>
-                  value === watch('password') || 'Passwords do not match',
-              })}
-              type="password"
-              placeholder="Confirm Password"
-              className="w-full px-3 py-2 border rounded"
-            />
+            <div className="relative">
+              <input
+                {...register('confirmPassword', {
+                  required: 'Please confirm your password',
+                  validate: (value) =>
+                    value === watch('password') || 'Passwords do not match',
+                })}
+                type={showConfirmPassword ? 'text' : 'password'}
+                placeholder="Confirm Password"
+                className="w-full px-3 py-2 border rounded pr-10"
+              />
+              <div
+                className="absolute inset-y-0 right-3 flex items-center cursor-pointer text-gray-600"
+                onClick={() => setShowConfirmPassword((prev) => !prev)}
+              >
+                {showConfirmPassword ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
+              </div>
+            </div>
             {errors.confirmPassword && (
               <p className="text-red-500 text-sm">{errors.confirmPassword.message}</p>
             )}

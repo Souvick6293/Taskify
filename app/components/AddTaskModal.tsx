@@ -48,7 +48,6 @@ const AddTaskModal = ({ isOpen, onClose, editTaskData = null }: AddTaskModalProp
 
   const status = watch('status')
 
-  // Get current user ID
   useEffect(() => {
     const fetchUser = async () => {
       const { data, error } = await supabase.auth.getUser()
@@ -61,14 +60,14 @@ const AddTaskModal = ({ isOpen, onClose, editTaskData = null }: AddTaskModalProp
     fetchUser()
   }, [])
 
-  // ✨ Handle edit mode data and reset
+
   useEffect(() => {
     if (editTaskData && isOpen) {
-      console.log("🔍 Full editTaskData:", editTaskData)
+      console.log("Full editTaskData:", editTaskData)
   
       let tagData = editTaskData.tags
   
-      // যদি tagData একটা string হয়, তাহলে parse করো
+    
       if (typeof tagData === "string") {
         try {
           tagData = JSON.parse(tagData)
@@ -80,7 +79,7 @@ const AddTaskModal = ({ isOpen, onClose, editTaskData = null }: AddTaskModalProp
   
       reset({
         ...editTaskData,
-        tags: undefined, // form field এ না পাঠালেও চলবে
+        tags: undefined,
       })
   
       setTags(Array.isArray(tagData) ? tagData : [])
@@ -89,8 +88,6 @@ const AddTaskModal = ({ isOpen, onClose, editTaskData = null }: AddTaskModalProp
   
   
   
-
-  // ➕ Add tag
   const handleTagKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if ((e.key === 'Enter' || e.key === ',') && tagInput.trim()) {
       e.preventDefault()
@@ -102,12 +99,10 @@ const AddTaskModal = ({ isOpen, onClose, editTaskData = null }: AddTaskModalProp
     }
   }
 
-  // ❌ Remove tag
   const removeTag = (index: number) => {
     setTags(tags.filter((_, i) => i !== index))
   }
 
-  // ✅ Submit
   const onSubmit = (data: FormData) => {
     if (!user_id) {
       console.error('User not logged in.')
@@ -123,7 +118,6 @@ const AddTaskModal = ({ isOpen, onClose, editTaskData = null }: AddTaskModalProp
     }
 
     if (editTaskData?.id) {
-      // 🔄 Update task
       editTask.mutate(
         { id: editTaskData.id, ...finalData },
         {
@@ -141,7 +135,6 @@ const AddTaskModal = ({ isOpen, onClose, editTaskData = null }: AddTaskModalProp
         }
       )
     } else {
-      // ➕ Add task
       addTask.mutate(finalData, {
         onSuccess: () => {
           toast.success('Task added successfully')
@@ -167,7 +160,6 @@ const AddTaskModal = ({ isOpen, onClose, editTaskData = null }: AddTaskModalProp
           {editTaskData ? 'Edit Task' : 'Add New Task'}
         </h2>
 
-        {/* Task Name */}
         <div className="mb-4">
           <label htmlFor="task_name" className="block text-sm font-semibold text-gray-700 dark:text-gray-200">
             Task Name
@@ -181,7 +173,6 @@ const AddTaskModal = ({ isOpen, onClose, editTaskData = null }: AddTaskModalProp
           {errors.task_name && <p className="text-red-500 text-xs mt-1">{errors.task_name.message}</p>}
         </div>
 
-        {/* Description */}
         <div className="mb-4">
           <label htmlFor="description" className="block text-sm font-semibold text-gray-700 dark:text-gray-200">
             Description
@@ -199,7 +190,6 @@ const AddTaskModal = ({ isOpen, onClose, editTaskData = null }: AddTaskModalProp
           {errors.description && <p className="text-red-500 text-xs mt-1">{errors.description.message}</p>}
         </div>
 
-        {/* Tags */}
         <div className="mb-4">
           <label className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-1">Tags</label>
           <div className="w-full p-2 border rounded-md border-gray-300 dark:border-gray-600 flex flex-wrap gap-2">
@@ -229,7 +219,6 @@ const AddTaskModal = ({ isOpen, onClose, editTaskData = null }: AddTaskModalProp
           </div>
         </div>
 
-        {/* Priority & Status */}
         <div className="mb-4 flex gap-4">
           <div className="w-1/2">
             <label htmlFor="priority" className="block text-sm font-semibold text-gray-700 dark:text-gray-200">
@@ -260,7 +249,6 @@ const AddTaskModal = ({ isOpen, onClose, editTaskData = null }: AddTaskModalProp
           </div>
         </div>
 
-        {/* Deadline */}
         {status !== 'completed' && (
           <div className="mb-4">
             <label htmlFor="deadline" className="block text-sm font-semibold text-gray-700 dark:text-gray-200">
@@ -276,7 +264,6 @@ const AddTaskModal = ({ isOpen, onClose, editTaskData = null }: AddTaskModalProp
           </div>
         )}
 
-        {/* Reminder */}
         {status !== 'completed' && (
           <div className="mb-4">
             <label htmlFor="reminder" className="block text-sm font-semibold text-gray-700 dark:text-gray-200">
@@ -300,7 +287,6 @@ const AddTaskModal = ({ isOpen, onClose, editTaskData = null }: AddTaskModalProp
           </div>
         )}
 
-        {/* Buttons */}
         <div className="flex justify-end gap-3">
           <button
             onClick={() => {

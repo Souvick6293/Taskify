@@ -6,6 +6,7 @@ import {
   FaCog,
   FaBars,
   FaTimes,
+  FaChartPie
 } from 'react-icons/fa'
 import {
   IoCheckmarkDoneCircle
@@ -20,12 +21,14 @@ import Profile from '../components/Profile'
 import ThemeToggle from '../components/ThemeToggle'
 import AddTaskModal from '../components/AddTaskModal'
 import TaskList from '../components/TaskList'
+import ReminderNotice from '../components/ReminderNotice'
 
 const tabs = [
   { name: 'All Tasks', icon: FaTasks },
   { name: 'Completed', icon: IoCheckmarkDoneCircle },
   { name: 'Pending', icon: MdPendingActions },
   { name: 'Favorites', icon: MdOutlineFavorite },
+  { name: 'Task Reports', icon: FaChartPie }
 ]
 
 export default function TaskManage() {
@@ -46,7 +49,7 @@ export default function TaskManage() {
   return (
     <div className="flex h-screen relative overflow-hidden dark:bg-gray-900 bg-gray-200">
 
-      {/* Mobile collapsed sidebar (icons only) */}
+    
       {isMobile && !showMobileSidebar && (
         <div className="w-16 bg-indigo-700 text-white dark:bg-gray-900 flex flex-col items-center py-4 space-y-6">
           <button onClick={() => setShowMobileSidebar(true)}>
@@ -78,7 +81,7 @@ export default function TaskManage() {
               : 'w-64 h-full'
           )}
         >
-          {/* Header */}
+
           <div className="flex justify-between items-center mb-6">
             <div className="flex items-center gap-5 py-1 px-5 shadow-line rounded-lg">
               <Image
@@ -88,10 +91,8 @@ export default function TaskManage() {
                 height={40}
                 className="rounded-lg"
               />
-              <div className="font-semibold leading-tight text-gray-800 dark:text-white">
-                Taskflow
-                <br />
-                Manage
+              <div className="font-semibold leading-tight text-gray-800 dark:text-white text-md md:text-3xl">
+                Taskify
               </div>
             </div>
             {isMobile && (
@@ -101,7 +102,6 @@ export default function TaskManage() {
             )}
           </div>
 
-          {/* Tabs */}
           <div className="space-y-2">
             {tabs.map((tab) => (
               <button
@@ -123,21 +123,23 @@ export default function TaskManage() {
         </div>
       )}
 
-      {/* Main Content */}
       <div className="flex-1 text-gray-900 dark:text-white overflow-y-auto w-full">
         <div className=' px-6 py-4 bg-gray-200 dark:bg-gray-900 flex justify-end items-center gap-4'>
-          <div className='flex bg-gray-300 dark:bg-gray-800 py-1 pr-4 gap-3 items-center rounded-3xl cursor-pointer'
+          <div className='flex bg-gray-300 dark:bg-gray-800 md:py-1 md:pr-4 py-0 pr-0 gap-3 items-center rounded-3xl cursor-pointer'
             onClick={() => setIsModalOpen(true)}
           >
-            <div className='text-md md:text-4xl bg-white dark:bg-gray-500 w-10 h-10 flex justify-center items-center rounded-full'>
+            <div className='text-4xl bg-white dark:bg-gray-500 w-10 h-10 flex justify-center items-center rounded-full p-0 m-0'>
               +
             </div>
-            <div className='text-sm sm:text-base md:text-lg lg:text-xl'>
+            <div className="hidden sm:hidden md:block text-sm md:text-lg lg:text-xl">
               Add New Task
             </div>
           </div>
           <div>
             <ThemeToggle />
+          </div>
+          <div>
+            <ReminderNotice />
           </div>
           <div>
             <Profile />
@@ -150,7 +152,6 @@ export default function TaskManage() {
           </div>
         </div>
       </div>
-      {/* Add Task Modal */}
       <AddTaskModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </div>
   )

@@ -11,7 +11,7 @@ const AboutUs = () => {
         </h2>
 
         <p className="text-lg sm:text-xl text-gray-700 dark:text-gray-300 mb-12 max-w-[700] m-auto">
-          We provide an easy-to-use task management solution designed to help you stay organized, productive, and on top of your daily tasks. With TaskFlow Manager, you can effortlessly manage tasks, collaborate with teams, and get notifications so nothing falls through the cracks.
+        Welcome to Taskify, your smart and simple solution for task management. We believe staying organized should be easy and stress-free. Taskify lets you create tasks, set deadlines, receive reminders, and manage priorities—all in one place. Whether {`you're`} a student or a professional, our clean and intuitive app helps you stay focused and in control. With Taskify, productivity becomes effortless.
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -74,21 +74,6 @@ const AboutUs = () => {
             </h3>
             <p className="text-gray-700 dark:text-gray-300">
               Our simple and intuitive design makes managing tasks a breeze. Whether you are an individual or part of a team, you can start using the tool right away with minimal setup.
-            </p>
-          </motion.div>
-
-          <motion.div
-            className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg"
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: false, amount: 0.3 }}
-            transition={{ duration: 0.5, delay: 0.8 }}
-          >
-            <h3 className="text-xl font-semibold text-black dark:text-white mb-4">
-              Admin Features
-            </h3>
-            <p className="text-gray-700 dark:text-gray-300">
-              Admins have full control over tasks and users. They can assign tasks, monitor progress, and even moderate task-related activities to ensure smooth operations within the team.
             </p>
           </motion.div>
 

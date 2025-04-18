@@ -36,7 +36,7 @@ const Banner = () => {
             <p className="mt-4 text-lg sm:text-xl text-black dark:text-white">
               Stay on top of your work with our powerful and easy-to-use task management tool.
               Organize your daily tasks, collaborate with your team, and track progress in real-time.
-              TaskFlow Manager helps you stay productive, efficient, and stress-free!
+              Taskify helps you stay productive, efficient, and stress-free!
             </p>
 
             <div className="mt-6">
@@ -60,7 +60,7 @@ const Banner = () => {
               alt="Task Management"
               width={500}
               height={500}
-              className="rounded-lg shadow-lg object-cover"
+              className="rounded-lg shadow-2xl object-cover"
             />
           </motion.div>
 

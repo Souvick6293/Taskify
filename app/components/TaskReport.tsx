@@ -1,58 +1,86 @@
-import React, { useEffect, useState } from 'react'
+'use client'
 
-type Task = {
-  id: string
-  title: string
-  status: 'completed' | 'pending'
-}
+import { useEffect, useState } from 'react'
+import { Pie } from 'react-chartjs-2'
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js'
+import { useTasks } from '@/hooks/useTasks'
+import { supabase } from '@/lib/supabaseClient'
+import { motion } from 'framer-motion'
+
+ChartJS.register(ArcElement, Tooltip, Legend)
 
 const TaskReport = () => {
-  const [tasks, setTasks] = useState<Task[]>([])
-  const [activeTabs, setActiveTab] = useState<string>('Reports')
-
-  useEffect(() => {
-    // Here you should fetch the tasks data (from API, state, or props)
-    // For demonstration, I'll use a mock list of tasks
-
-    setTasks([
-      { id: '1', title: 'Task 1', status: 'completed' },
-      { id: '2', title: 'Task 2', status: 'pending' },
-      { id: '3', title: 'Task 3', status: 'completed' },
-      { id: '4', title: 'Task 4', status: 'pending' },
-    ])
-  }, [])
-
-  const filteredTasks = tasks.filter((task) => {
-    if (activeTabs === 'Reports') return task.status === 'completed'
-    return true
+  const [userId, setUserId] = useState<string | null>(null)
+  const { fetchTasks } = useTasks(userId ?? '')
+  const [taskStats, setTaskStats] = useState({
+    total: 0,
+    completed: 0,
+    pending: 0,
   })
 
+  useEffect(() => {
+    const getUser = async () => {
+      const {
+        data: { user },
+        error,
+      } = await supabase.auth.getUser()
+
+      if (user) setUserId(user.id)
+      if (error) console.error('Error fetching user:', error.message)
+    }
+
+    getUser()
+  }, [])
+
+  useEffect(() => {
+    if (!fetchTasks) return
+
+    const totalTasks = fetchTasks.length
+    const completedTasks = fetchTasks.filter((task) => task.status === 'completed').length
+    const pendingTasks = fetchTasks.filter((task) => task.status === 'pending').length
+
+    setTaskStats({
+      total: totalTasks,
+      completed: completedTasks,
+      pending: pendingTasks,
+    })
+  }, [fetchTasks])
+
+  const chartData = {
+    labels: ['Completed Tasks', 'Pending Tasks'],
+    datasets: [
+      {
+        label: 'Task Status',
+        data: [taskStats.completed, taskStats.pending],
+        backgroundColor: ['#4caf50', '#f44336'],
+        hoverBackgroundColor: ['#66bb6a', '#ef5350'],
+      },
+    ],
+  }
+
   return (
-    <div className="p-4">
-      <h2 className="text-2xl font-semibold mb-4">Task Report</h2>
-      <div className="mb-4">
-        <button
-          className="px-4 py-2 bg-blue-500 text-white rounded"
-          onClick={() => setActiveTab('Reports')}
-        >
-          Reports Tab
-        </button>
-      </div>
-      <div>
-        <ul>
-          {filteredTasks.length > 0 ? (
-            filteredTasks.map((task) => (
-              <li key={task.id} className="border-b py-2">
-                <h3 className="font-medium">{task.title}</h3>
-                <p>Status: {task.status}</p>
-              </li>
-            ))
-          ) : (
-            <p>No tasks found for this status.</p>
-          )}
-        </ul>
-      </div>
-    </div>
+    <motion.div>
+      <p className="text-lg font-medium text-gray-700 dark:text-gray-300 pt-5">
+      Total Tasks: <span className="font-bold text-gray-800 dark:text-white">{taskStats.total}</span><br />
+      Completed Tasks: <span className="font-bold text-gray-800 dark:text-white">{taskStats.completed}</span><br />
+      Pending Tasks: <span className="font-bold text-gray-800 dark:text-white">{taskStats.pending}</span>
+    </p>
+      <motion.div
+        className="mb-4 flex items-center justify-center"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1 }}
+      >
+
+      </motion.div>
+      {taskStats.total > 0 ? (
+        <div className="relative max-w-[400px] min-h-[400px] m-auto">
+          <Pie data={chartData} options={{ responsive: true, maintainAspectRatio: false }} />
+        </div>
+      ) : (
+        <p className="text-gray-500 dark:text-gray-400">No tasks available to display.</p>
+      )}
+    </motion.div>
   )
 }
 

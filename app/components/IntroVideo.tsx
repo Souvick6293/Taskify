@@ -29,7 +29,7 @@ const router = useRouter()
                 <div className="max-w-4xl mx-auto bg-white dark:bg-gray-900 rounded-lg shadow-md p-6">
                     <div className="flex justify-center items-center mb-6 sm:h-[300px] md:h-[400px] lg:h-[500px]">
                         <ReactPlayer
-                            url='https://youtu.be/gKYt2wJUmiQ?si=p5H1UmaPKtnoJs_l'
+                            url='https://youtu.be/HjNC-vB9X38?si=alph5yeKq4O2mrAx'
                             width="100%"
                             height="100%"
                             controls={true}
@@ -39,7 +39,7 @@ const router = useRouter()
                         />
                     </div>
                     <p className="md:text-md lg:text-lg text-gray-700 dark:text-gray-300 text-center mb-8">
-                        With the TaskFlow Manager app, you can easily manage your daily tasks. This video will show you how to use the app to create tasks, stay organized, and manage deadlines. You’ll also be able to track task statuses and categorize them with custom tags for easy access.
+                        With the Taskify app, you can easily manage your daily tasks. This video will show you how to use the app to create tasks, stay organized, and manage deadlines. You’ll also be able to track task statuses and categorize them with custom tags for easy access.
                         After watching the video, follow the simple steps to start creating, managing, and completing your tasks in the app.
                     </p>
                     <div className="flex justify-center">

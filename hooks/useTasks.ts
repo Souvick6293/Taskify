@@ -5,8 +5,8 @@ interface Task {
   id: string
   task_name: string
   description: string
-  priority: string
-  status: string
+  priority: 'low' | 'medium' | 'high' 
+   status: 'pending' | 'completed'
   deadline?: string
   reminder?: string
   tags?: string[]
