@@ -6,7 +6,7 @@ import { supabase } from '@/lib/supabaseClient'
 export const useAuth = () => {
   const queryClient = useQueryClient()
 
-  // ✅ Fetch current user using TanStack Query
+  // Fetch current user using TanStack Query
   const { data: user, isLoading: isUserLoading } = useQuery({
     queryKey: ['current-user'],
     queryFn: async () => {
@@ -32,7 +32,7 @@ export const useAuth = () => {
         password,
         options: {
           data: { full_name: fullName },
-          emailRedirectTo: `${location.origin}/auth/callback`, // Optional
+          emailRedirectTo: `${location.origin}/auth/callback`, 
         },
       })
       if (error) throw new Error(error.message)
