@@ -113,16 +113,27 @@ export const useAuth = () => {
   })
 
   // Login with Google
-  const loginWithGoogle = async () => {
-    const { error } = await supabase.auth.signInWithOAuth({ provider: 'google' })
-    if (error) throw new Error(error.message)
-  }
+const loginWithGoogle = async () => {
+  const { error } = await supabase.auth.signInWithOAuth({
+    provider: 'google',
+    options: {
+      redirectTo: 'https://taskify-sp.vercel.app'
+    }
+  });
+  if (error) throw new Error(error.message);
+};
 
-  // Login with Facebook
-  const loginWithFacebook = async () => {
-    const { error } = await supabase.auth.signInWithOAuth({ provider: 'facebook' })
-    if (error) throw new Error(error.message)
-  }
+// Login with Facebook
+const loginWithFacebook = async () => {
+  const { error } = await supabase.auth.signInWithOAuth({
+    provider: 'facebook',
+    options: {
+      redirectTo: 'https://taskify-sp.vercel.app'
+    }
+  });
+  if (error) throw new Error(error.message);
+};
+
 
   return {
     user,
